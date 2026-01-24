@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Livros</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f3;
+            padding: 40px;
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: 70%;
+            padding: 8px 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        ul {
+            max-width: 600px;
+            margin: auto;
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .capa {
+            display: none;
+            position: absolute;
+            right: -140px;
+            top: 0;
+            width: 120px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        li:hover .capa {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<h1 style="text-align:center">📚 Livros Cadastrados</h1>
+
+<!-- Formulário de busca -->
+<div class="search-box">
+    <form method="get" action="{% url 'listar_livros' %}">
+        <input type="text" name="q" placeholder="Digite o nome do livro..." value="{{ request.GET.q }}">
+        <button type="submit">Buscar</button>
+    </form>
+</div>
+
+<ul>
+{% for livro in livros %}
+    <li>
+        <strong>{{ livro.titulo }}</strong><br>
+        Autor: {{ livro.autor }}<br>
+        Ano: {{ livro.ano_publicacao }}
+
+        <img 
+          class="capa"
+          src="{% static 'biblioteca/capas/' %}{{ livro.titulo|lower|slugify }}.jpg"
+        >
+    </li>
+{% empty %}
+    <li>Nenhum livro encontrado.</li>
+{% endfor %}
+</ul>
+
+</body>
+</html>
